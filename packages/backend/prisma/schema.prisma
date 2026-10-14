@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  employee
+}
+
+enum RequestStatus {
+  created
+  opened
+  drafting_started
+  google_link_opened
+  expired
+  revoked
+}
+
+enum EventType {
+  request_opened
+  text_copied
+  google_link_opened
+}
+
+model User {
+  id           String          @id @default(uuid())
+  name         String
+  email        String          @unique
+  passwordHash String
+  role         Role            @default(employee)
+  isActive     Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  createdRequests    ReviewRequest[] @relation("CreatedByUser")
+  attributedRequests ReviewRequest[] @relation("AttributedEmployee")
+
+  @@map("users")
+}
+
+model Service {
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  reviewContext String?
+  isActive      Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("services")
+}
+
+model ReviewRequest {
+  id                    String         @id @default(uuid())
+  publicTokenHash       String         @unique
+  createdByUserId       String
+  attributedEmployeeId  String?
+  serviceIds            String[]       @default([])
+  clientReference       String?
+  status                RequestStatus  @default(created)
+  expiresAt             DateTime
+  revokedAt             DateTime?
+  googleLinkOpenedAt    DateTime?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  createdByUser         User           @relation("CreatedByUser", fields: [createdByUserId], references: [id])
+  attributedEmployee    User?          @relation("AttributedEmployee", fields: [attributedEmployeeId], references: [id])
+  events                ReviewRequestEvent[]
+
+  // Note: Selected star rating is deliberately NOT stored in adherence to Google Anti-Gating Policy.
+  @@index([publicTokenHash])
+  @@index([createdByUserId])
+  @@index([status])
+  @@map("review_requests")
+}
+
+model ReviewRequestEvent {
+  id              String         @id @default(uuid())
+  reviewRequestId String
+  eventType       EventType
+  occurredAt      DateTime       @default(now())
+  metadata        Json?
+
+  reviewRequest   ReviewRequest  @relation(fields: [reviewRequestId], references: [id], onDelete: Cascade)
+
+  @@index([reviewRequestId])
+  @@index([eventType])
+  @@map("review_request_events")
+}
+
+model AppSettings {
+  id                 String   @id @default("default")
+  companyName        String   @default("SME Experts")
+  logoUrl            String?
+  googleReviewUrl    String   @default("")
+  clientIntroMessage String?
+  aiDraftingEnabled  Boolean  @default(true)
+  defaultLanguage    String   @default("en")
+  updatedAt          DateTime @updatedAt
+
+  @@map("app_settings")
+}
+
+model DraftGenerationLog {
+  id               String   @id @default(uuid())
+  requestId        String?
+  promptTokens     Int?
+  completionTokens Int?
+  latencyMs        Int?
+  status           String
+  errorMessage     String?
+  createdAt        DateTime @default(now())
+
+  // Note: Customer draft text and star ratings are omitted from telemetry for privacy and compliance.
+  @@index([status])
+  @@map("draft_generation_logs")
+}
