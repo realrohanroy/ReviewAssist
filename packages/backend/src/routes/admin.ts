@@ -50,8 +50,15 @@ const devServices = [
 
 const devUsers = [
   { id: 'seed-admin-uuid', name: 'System Admin', email: 'admin@smeexperts.com', role: 'admin', isActive: true },
-  { id: 'emp-1', name: 'Sarah Jenkins', email: 'sarah.j@smeexperts.com', role: 'employee', isActive: true },
-  { id: 'emp-2', name: 'David Chen', email: 'david.c@smeexperts.com', role: 'employee', isActive: true }
+  { id: 'emp-saksham', name: 'Saksham Gupta', email: 'saksham.g@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-rohan', name: 'Rohan Roy', email: 'rohan.r@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-sachin', name: 'Sachin', email: 'sachin@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-chirag', name: 'Chirag', email: 'chirag@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-arshad', name: 'Arshad', email: 'arshad@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-rhitika', name: 'Rhitika', email: 'rhitika@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-shubham', name: 'Shubham', email: 'shubham@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-mayur', name: 'Mayur', email: 'mayur@smeexperts.com', role: 'employee', isActive: true },
+  { id: 'emp-ravi', name: 'Ravi', email: 'ravi@smeexperts.com', role: 'employee', isActive: true }
 ];
 
 /* -------------------------------------------------------------------------- */

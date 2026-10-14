@@ -33,8 +33,15 @@ const FALLBACK_SERVICES = [
 
 const FALLBACK_EMPLOYEES = [
   { id: 'seed-admin-uuid', name: 'System Admin', email: 'admin@smeexperts.com', role: 'admin' },
-  { id: 'emp-1', name: 'Sarah Jenkins', email: 'sarah.j@smeexperts.com', role: 'employee' },
-  { id: 'emp-2', name: 'David Chen', email: 'david.c@smeexperts.com', role: 'employee' }
+  { id: 'emp-saksham', name: 'Saksham Gupta', email: 'saksham.g@smeexperts.com', role: 'employee' },
+  { id: 'emp-rohan', name: 'Rohan Roy', email: 'rohan.r@smeexperts.com', role: 'employee' },
+  { id: 'emp-sachin', name: 'Sachin', email: 'sachin@smeexperts.com', role: 'employee' },
+  { id: 'emp-chirag', name: 'Chirag', email: 'chirag@smeexperts.com', role: 'employee' },
+  { id: 'emp-arshad', name: 'Arshad', email: 'arshad@smeexperts.com', role: 'employee' },
+  { id: 'emp-rhitika', name: 'Rhitika', email: 'rhitika@smeexperts.com', role: 'employee' },
+  { id: 'emp-shubham', name: 'Shubham', email: 'shubham@smeexperts.com', role: 'employee' },
+  { id: 'emp-mayur', name: 'Mayur', email: 'mayur@smeexperts.com', role: 'employee' },
+  { id: 'emp-ravi', name: 'Ravi', email: 'ravi@smeexperts.com', role: 'employee' }
 ];
 
 // GET /api/services - Active services

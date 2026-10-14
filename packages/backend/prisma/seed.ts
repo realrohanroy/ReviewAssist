@@ -41,7 +41,35 @@ async function main() {
   });
   console.log(`✓ Admin user created: ${admin.email}`);
 
-  // 3. Sample Services
+  // 3. Team Members
+  const employeeSeedData = [
+    { name: 'Saksham Gupta', email: 'saksham.g@smeexperts.com' },
+    { name: 'Rohan Roy', email: 'rohan.r@smeexperts.com' },
+    { name: 'Sachin', email: 'sachin@smeexperts.com' },
+    { name: 'Chirag', email: 'chirag@smeexperts.com' },
+    { name: 'Arshad', email: 'arshad@smeexperts.com' },
+    { name: 'Rhitika', email: 'rhitika@smeexperts.com' },
+    { name: 'Shubham', email: 'shubham@smeexperts.com' },
+    { name: 'Mayur', email: 'mayur@smeexperts.com' },
+    { name: 'Ravi', email: 'ravi@smeexperts.com' }
+  ];
+
+  for (const emp of employeeSeedData) {
+    await prisma.user.upsert({
+      where: { email: emp.email },
+      update: { name: emp.name },
+      create: {
+        name: emp.name,
+        email: emp.email,
+        passwordHash,
+        role: Role.employee,
+        isActive: true
+      }
+    });
+  }
+  console.log(`✓ Seeded ${employeeSeedData.length} team members`);
+
+  // 4. Sample Services
   const sampleServices = [
     {
       name: 'Business Advisory & Consultation',

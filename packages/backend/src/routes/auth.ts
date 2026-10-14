@@ -62,7 +62,8 @@ authRouter.post('/signin', async (req: Request, res: Response): Promise<void> =>
     });
   } catch (err) {
     // If database is offline during local development, allow default seed credentials
-    if (String(email).toLowerCase().trim() === 'admin@smeexperts.com' && password === 'Admin@12345') {
+    const cleanEmail = String(email).toLowerCase().trim();
+    if (cleanEmail === 'admin@smeexperts.com' && password === 'Admin@12345') {
       const demoUser = {
         id: 'seed-admin-uuid',
         name: 'System Admin (Dev Fallback)',
@@ -82,6 +83,42 @@ authRouter.post('/signin', async (req: Request, res: Response): Promise<void> =>
         maxAge: 7 * 24 * 60 * 60 * 1000
       });
       res.json({ user: demoUser, token });
+      return;
+    }
+
+    const devEmployees = [
+      { id: 'emp-saksham', name: 'Saksham Gupta', email: 'saksham.g@smeexperts.com' },
+      { id: 'emp-rohan', name: 'Rohan Roy', email: 'rohan.r@smeexperts.com' },
+      { id: 'emp-sachin', name: 'Sachin', email: 'sachin@smeexperts.com' },
+      { id: 'emp-chirag', name: 'Chirag', email: 'chirag@smeexperts.com' },
+      { id: 'emp-arshad', name: 'Arshad', email: 'arshad@smeexperts.com' },
+      { id: 'emp-rhitika', name: 'Rhitika', email: 'rhitika@smeexperts.com' },
+      { id: 'emp-shubham', name: 'Shubham', email: 'shubham@smeexperts.com' },
+      { id: 'emp-mayur', name: 'Mayur', email: 'mayur@smeexperts.com' },
+      { id: 'emp-ravi', name: 'Ravi', email: 'ravi@smeexperts.com' }
+    ];
+
+    const matchedEmp = devEmployees.find((e) => e.email === cleanEmail);
+    if (matchedEmp && (password === 'Employee@123' || password === 'Admin@12345')) {
+      const empUser = {
+        id: matchedEmp.id,
+        name: matchedEmp.name,
+        email: matchedEmp.email,
+        role: 'employee' as const
+      };
+      const token = signToken({
+        userId: empUser.id,
+        email: empUser.email,
+        role: empUser.role,
+        name: empUser.name
+      });
+      res.cookie('auth_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      });
+      res.json({ user: empUser, token });
       return;
     }
 
